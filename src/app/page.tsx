@@ -6,7 +6,7 @@ import { getPromises, getTodayPromise, createTodayPromise, updatePromise } from 
 import PromiseForm from "@/components/PromiseForm";
 import TodayPromiseCard from "@/components/TodayPromiseCard";
 import CheckInForm from "@/components/CheckInForm";
-import CompletedState from "@/components/CompletedState";
+import CompletedPromiseCard from "@/components/CompletedPromiseCard";
 
 type Phase = "loading" | "new" | "pending" | "checking-in" | "completed";
 
@@ -66,7 +66,15 @@ export default function HomePage() {
 
   return (
     <div className="pt-8">
-      {phase === "new" && <PromiseForm onCreate={handleCreate} />}
+      {phase === "new" && (
+        <>
+          <div className="text-center space-y-1 mb-6">
+            <p className="text-warm-700 text-lg font-medium">One promise is enough.</p>
+            <p className="text-warm-400 text-sm">Choose something honest, small, and possible today.</p>
+          </div>
+          <PromiseForm onCreate={handleCreate} />
+        </>
+      )}
       {phase === "pending" && promise && (
         <TodayPromiseCard promise={promise} onSelectStatus={handleCheckIn} />
       )}
@@ -77,7 +85,7 @@ export default function HomePage() {
           onCancel={() => setPhase("pending")}
         />
       )}
-      {phase === "completed" && promise && <CompletedState promise={promise} />}
+      {phase === "completed" && promise && <CompletedPromiseCard promise={promise} />}
     </div>
   );
 }
