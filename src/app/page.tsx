@@ -72,9 +72,9 @@ export default function HomePage() {
       )}
       {phase === "checking-in" && promise && (
         <CheckInForm
-          promise={promise}
-          status={checkInStatus}
-          onComplete={handleComplete}
+          selectedStatus={checkInStatus as "kept" | "partly" | "broke"}
+          onSave={handleComplete}
+          onCancel={() => setPhase("pending")}
         />
       )}
       {phase === "completed" && promise && <CompletedState promise={promise} />}
