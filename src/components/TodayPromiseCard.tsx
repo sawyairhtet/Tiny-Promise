@@ -22,7 +22,7 @@ const statusButtons = [
   },
   {
     status: "broke" as const,
-    label: "I broke it",
+    label: "Not today",
     style:
       "border-rose-200 bg-rose-50 text-rose-400 hover:border-rose-300 hover:bg-rose-100",
   },

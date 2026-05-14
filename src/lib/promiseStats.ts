@@ -37,7 +37,7 @@ export function getGentleInsight(promises: PromiseEntry[]): string {
   const recent = getLastCompletedPromises(promises, 3);
   const brokeCount = recent.filter((p) => p.status === "broke").length;
   const keptCount = recent.filter((p) => p.status === "kept").length;
-  const partlyCount = completed.filter((p) => p.status === "partly").length;
+  const partlyCount = recent.filter((p) => p.status === "partly").length;
 
   if (brokeCount >= 2) {
     return "Your recent promises may be too heavy. Tomorrow can be smaller.";

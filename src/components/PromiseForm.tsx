@@ -39,6 +39,7 @@ export default function PromiseForm({ onCreate }: PromiseFormProps) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Today I promise to..."
+        aria-label="Your promise for today"
         rows={3}
         maxLength={200}
         className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 shadow-soft placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"

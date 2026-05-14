@@ -50,21 +50,21 @@ export default function InsightCards({ promises }: InsightCardsProps) {
         ) : (
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-sage-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-sage-400" aria-hidden="true" />
               <span className="text-warm-700 text-sm">
                 {keptCount} kept
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" aria-hidden="true" />
               <span className="text-warm-700 text-sm">
                 {partlyCount} partly
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-300" aria-hidden="true" />
               <span className="text-warm-700 text-sm">
-                {brokeCount} broke
+                {brokeCount} not today
               </span>
             </div>
           </div>

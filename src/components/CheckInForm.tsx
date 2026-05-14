@@ -54,6 +54,7 @@ export default function CheckInForm({
         value={reflection}
         onChange={(e) => setReflection(e.target.value)}
         placeholder="Write a few words, or leave it blank."
+        aria-label="Your reflection"
         rows={3}
         maxLength={300}
         className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 shadow-soft placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"

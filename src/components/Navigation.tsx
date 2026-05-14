@@ -13,7 +13,7 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-warm-200 z-50">
+    <nav aria-label="Main navigation" className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-warm-200 z-50">
       <div className="max-w-[640px] mx-auto flex">
         {navItems.map((item) => {
           const isActive =
@@ -25,6 +25,7 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               prefetch={false}
+              aria-current={isActive ? "page" : undefined}
               className={`flex-1 py-5 text-center text-sm transition-colors focus-visible:outline-none focus-visible:text-sage-600 ${
                 isActive
                   ? "text-sage-600 font-semibold"
