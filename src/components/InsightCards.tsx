@@ -10,7 +10,7 @@ interface InsightCardsProps {
 
 const statusDots: Record<string, string> = {
   kept: "bg-sage-400",
-  partly: "bg-sky-400",
+  partly: "bg-amber-400",
   broke: "bg-rose-300",
 };
 

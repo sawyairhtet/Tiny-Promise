@@ -1,34 +1,34 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-warm-50: #fdf8f3;
-  --color-warm-100: #f5ebe0;
-  --color-warm-200: #e8d5c0;
-  --color-warm-300: #d4b896;
-  --color-warm-400: #c19a6b;
-  --color-warm-500: #a67c52;
-  --color-warm-600: #8b6340;
-  --color-warm-700: #6f4e33;
-  --color-warm-800: #5a3e2b;
-  --color-warm-900: #3d2b1e;
+  --color-warm-50: #faf7f2;
+  --color-warm-100: #f0ebe2;
+  --color-warm-200: #e0d5c7;
+  --color-warm-300: #c4b39c;
+  --color-warm-400: #a08a6e;
+  --color-warm-500: #87725a;
+  --color-warm-600: #6e5b46;
+  --color-warm-700: #574838;
+  --color-warm-800: #433729;
+  --color-warm-900: #362d22;
 
-  --color-sage-50: #f0f4f0;
-  --color-sage-100: #dce5dc;
-  --color-sage-200: #b8cab8;
-  --color-sage-300: #8faa8f;
-  --color-sage-400: #6b8e6b;
-  --color-sage-500: #557755;
-  --color-sage-600: #456045;
-  --color-sage-700: #374c37;
-  --color-sage-800: #2d3d2d;
-  --color-sage-900: #1f2b1f;
+  --color-sage-50: #f0f5f0;
+  --color-sage-100: #dce7dc;
+  --color-sage-200: #b5cfb5;
+  --color-sage-300: #8bb38b;
+  --color-sage-400: #6b966b;
+  --color-sage-500: #527a52;
+  --color-sage-600: #436243;
+  --color-sage-700: #364e36;
+  --color-sage-800: #2c3e2c;
+  --color-sage-900: #1f2c1f;
 
-  --color-sky-50: #f0f6fa;
-  --color-sky-100: #dce8f0;
-  --color-sky-200: #b8d1e2;
-  --color-sky-300: #8fb5cf;
-  --color-sky-400: #6b99bb;
-  --color-sky-500: #5580a0;
+  --color-amber-50: #fdf8ed;
+  --color-amber-100: #f5ecd0;
+  --color-amber-200: #e8d6a0;
+  --color-amber-300: #d4ba6e;
+  --color-amber-400: #c2a24e;
+  --color-amber-500: #a88a3a;
 
   --color-rose-50: #fdf2f2;
   --color-rose-100: #f5dede;

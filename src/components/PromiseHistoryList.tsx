@@ -16,7 +16,7 @@ const statusLabels: Record<PromiseStatus, string> = {
 
 const statusColors: Record<PromiseStatus, string> = {
   kept: "text-sage-600 bg-sage-50 border-sage-200",
-  partly: "text-sky-500 bg-sky-50 border-sky-200",
+  partly: "text-amber-500 bg-amber-50 border-amber-200",
   broke: "text-rose-400 bg-rose-50 border-rose-200",
   pending: "text-warm-400 bg-warm-100 border-warm-200",
 };

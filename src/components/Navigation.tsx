@@ -14,9 +14,12 @@ export default function Navigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-warm-200 z-50">
-      <div className="max-w-md mx-auto flex">
+      <div className="max-w-[640px] mx-auto flex">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            item.href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
@@ -24,7 +27,7 @@ export default function Navigation() {
               prefetch={false}
               className={`flex-1 py-4 text-center text-sm transition-colors ${
                 isActive
-                  ? "text-sage-700 font-semibold"
+                  ? "text-sage-600 font-semibold"
                   : "text-warm-400 hover:text-warm-600"
               }`}
             >
