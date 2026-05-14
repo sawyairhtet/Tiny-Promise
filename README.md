@@ -58,6 +58,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm start` | Start the production server |
 | `npm run lint` | Run ESLint |
 
+## Deployment
+
+Tiny Promise is designed to deploy on [Vercel](https://vercel.com) with zero configuration.
+
+1. Push your code to a GitHub repository.
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
+3. Vercel auto-detects Next.js — accept the default settings and click **Deploy**.
+4. Your app will be live at a `.vercel.app` URL within minutes.
+
+Every push to `main` triggers a new production deployment automatically.
+
+> **Note:** Tiny Promise stores all data in your browser's `localStorage`. There is no backend, no database, and no environment variables to configure. Your promises never leave your device.
+
 ## Folder Structure
 
 ```
