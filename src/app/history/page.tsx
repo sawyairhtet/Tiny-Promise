@@ -22,7 +22,10 @@ export default function HistoryPage() {
 
   return (
     <div className="pt-4">
-      <h2 className="text-lg font-semibold text-warm-700 mb-4">Your promises</h2>
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-warm-700">Promise History</h2>
+        <p className="text-warm-400 text-sm mt-1">A gentle record of showing up.</p>
+      </div>
       <PromiseHistoryList promises={promises} />
     </div>
   );

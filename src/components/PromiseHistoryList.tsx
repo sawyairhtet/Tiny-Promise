@@ -3,14 +3,14 @@
 import { PromiseEntry, PromiseStatus } from "@/types/promise";
 import { formatDisplayDate } from "@/lib/dateUtils";
 
-interface PromiseHistoryListProps {
+type PromiseHistoryListProps = {
   promises: PromiseEntry[];
-}
+};
 
 const statusLabels: Record<PromiseStatus, string> = {
   kept: "Kept",
   partly: "Partly kept",
-  broke: "Not today",
+  broke: "Broke",
   pending: "Pending",
 };
 
@@ -25,15 +25,15 @@ export default function PromiseHistoryList({ promises }: PromiseHistoryListProps
   if (promises.length === 0) {
     return (
       <div className="text-center pt-12 space-y-2">
-        <p className="text-warm-500">No promises yet.</p>
-        <p className="text-warm-400 text-sm">Your journey starts whenever you&apos;re ready.</p>
+        <p className="text-warm-500">Your promise history will appear here.</p>
+        <p className="text-warm-400 text-sm">Start with one tiny promise today.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-3">
-      {promises.map((p) => (
+      {[...promises].sort((a, b) => b.date.localeCompare(a.date)).map((p) => (
         <div
           key={p.id}
           className="bg-white rounded-xl border border-warm-200 p-4 space-y-2"
