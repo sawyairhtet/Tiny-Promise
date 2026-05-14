@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PromiseEntry } from "@/types/promise";
-import { getAllPromises } from "@/lib/promiseStorage";
+import { getPromises } from "@/lib/promiseStorage";
 import InsightCards from "@/components/InsightCards";
 
 export default function InsightsPage() {
@@ -11,7 +11,7 @@ export default function InsightsPage() {
 
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
-    setPromises(getAllPromises());
+    setPromises(getPromises());
     setLoaded(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);

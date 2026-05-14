@@ -1,7 +1,7 @@
 "use client";
 
 import { PromiseEntry, PromiseStatus } from "@/types/promise";
-import { formatDate } from "@/lib/dateUtils";
+import { formatDisplayDate } from "@/lib/dateUtils";
 
 interface PromiseHistoryListProps {
   promises: PromiseEntry[];
@@ -39,7 +39,7 @@ export default function PromiseHistoryList({ promises }: PromiseHistoryListProps
           className="bg-white rounded-xl border border-warm-200 p-4 space-y-2"
         >
           <div className="flex items-center justify-between">
-            <span className="text-warm-400 text-sm">{formatDate(p.date)}</span>
+            <span className="text-warm-400 text-sm">{formatDisplayDate(p.date)}</span>
             <span
               className={`rounded-full border px-3 py-0.5 text-xs font-medium ${statusColors[p.status]}`}
             >

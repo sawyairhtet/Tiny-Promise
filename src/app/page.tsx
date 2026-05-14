@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { PromiseEntry, PromiseStatus, TomorrowSize } from "@/types/promise";
-import { getTodayPromise, createPromise, updatePromise } from "@/lib/promiseStorage";
+import { getPromises, getTodayPromise, createTodayPromise, updatePromise } from "@/lib/promiseStorage";
 import PromiseForm from "@/components/PromiseForm";
 import TodayPromiseCard from "@/components/TodayPromiseCard";
 import CheckInForm from "@/components/CheckInForm";
@@ -16,8 +16,9 @@ export default function HomePage() {
   const [checkInStatus, setCheckInStatus] = useState<PromiseStatus>("kept");
 
   const load = useCallback(() => {
-    const today = getTodayPromise();
-    setPromise(today);
+    const promises = getPromises();
+    const today = getTodayPromise(promises);
+    setPromise(today ?? null);
     if (!today) {
       setPhase("new");
     } else if (today.status === "pending") {
@@ -34,8 +35,9 @@ export default function HomePage() {
   }, [load]);
 
   function handleCreate(text: string) {
-    const entry = createPromise(text);
-    setPromise(entry);
+    const promises = createTodayPromise(text);
+    const today = getTodayPromise(promises);
+    setPromise(today ?? null);
     setPhase("pending");
   }
 
@@ -46,16 +48,16 @@ export default function HomePage() {
 
   function handleComplete(reflection: string, tomorrowSize: TomorrowSize) {
     if (!promise) return;
-    const updated = updatePromise(promise.id, {
+    const updatedEntry: PromiseEntry = {
+      ...promise,
       status: checkInStatus,
       reflection: reflection || undefined,
       tomorrowSize,
       completedAt: new Date().toISOString(),
-    });
-    if (updated) {
-      setPromise(updated);
-      setPhase("completed");
-    }
+    };
+    updatePromise(updatedEntry);
+    setPromise(updatedEntry);
+    setPhase("completed");
   }
 
   if (phase === "loading") {

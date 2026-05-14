@@ -1,8 +1,8 @@
 "use client";
 
 import { PromiseEntry } from "@/types/promise";
-import { getCompletedCount, getSelfTrustScore, getLast7Completed, getGentleInsight } from "@/lib/promiseStats";
-import { formatDate } from "@/lib/dateUtils";
+import { getCompletedPromises, calculateSelfTrustScore, getLastCompletedPromises, getGentleInsight } from "@/lib/promiseStats";
+import { formatDisplayDate } from "@/lib/dateUtils";
 
 interface InsightCardsProps {
   promises: PromiseEntry[];
@@ -15,9 +15,10 @@ const statusDots: Record<string, string> = {
 };
 
 export default function InsightCards({ promises }: InsightCardsProps) {
-  const completedCount = getCompletedCount(promises);
-  const trustScore = getSelfTrustScore(promises);
-  const last7 = getLast7Completed(promises);
+  const completed = getCompletedPromises(promises);
+  const completedCount = completed.length;
+  const trustScore = calculateSelfTrustScore(promises);
+  const last7 = getLastCompletedPromises(promises, 7);
   const insight = getGentleInsight(promises);
 
   return (
@@ -28,7 +29,7 @@ export default function InsightCards({ promises }: InsightCardsProps) {
           <p className="text-warm-400 text-sm mt-1">Promises reflected on</p>
         </div>
         <div className="bg-white rounded-xl border border-warm-200 p-4 text-center">
-          <p className="text-3xl font-semibold text-sage-600">{trustScore}%</p>
+          <p className="text-3xl font-semibold text-sage-600">{trustScore !== null ? `${trustScore}%` : "—"}</p>
           <p className="text-warm-400 text-sm mt-1">Self-trust score</p>
         </div>
       </div>
@@ -40,7 +41,7 @@ export default function InsightCards({ promises }: InsightCardsProps) {
             {last7.map((p) => (
               <div key={p.id} className="flex items-center gap-3">
                 <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${statusDots[p.status] ?? "bg-warm-300"}`} />
-                <span className="text-warm-400 text-xs w-20 shrink-0">{formatDate(p.date)}</span>
+                <span className="text-warm-400 text-xs w-20 shrink-0">{formatDisplayDate(p.date)}</span>
                 <span className="text-warm-700 text-sm truncate">{p.text}</span>
               </div>
             ))}

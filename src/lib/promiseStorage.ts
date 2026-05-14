@@ -1,9 +1,9 @@
 import { PromiseEntry } from "@/types/promise";
-import { getToday } from "./dateUtils";
+import { getTodayDate } from "./dateUtils";
 
-const STORAGE_KEY = "tiny-promise-entries";
+const STORAGE_KEY = "tiny-promise.entries";
 
-function readAll(): PromiseEntry[] {
+export function getPromises(): PromiseEntry[] {
   if (typeof window === "undefined") return [];
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
@@ -14,41 +14,38 @@ function readAll(): PromiseEntry[] {
   }
 }
 
-function writeAll(entries: PromiseEntry[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+export function savePromises(promises: PromiseEntry[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(promises));
 }
 
-export function getAllPromises(): PromiseEntry[] {
-  return readAll().sort((a, b) => b.date.localeCompare(a.date));
+export function getTodayPromise(
+  promises: PromiseEntry[]
+): PromiseEntry | undefined {
+  const today = getTodayDate();
+  return promises.find((p) => p.date === today);
 }
 
-export function getTodayPromise(): PromiseEntry | null {
-  const today = getToday();
-  return readAll().find((e) => e.date === today) ?? null;
-}
-
-export function createPromise(text: string): PromiseEntry {
+export function createTodayPromise(text: string): PromiseEntry[] {
+  const promises = getPromises();
   const entry: PromiseEntry = {
     id: crypto.randomUUID(),
-    date: getToday(),
+    date: getTodayDate(),
     text: text.trim(),
     status: "pending",
     createdAt: new Date().toISOString(),
   };
-  const entries = readAll();
-  entries.push(entry);
-  writeAll(entries);
-  return entry;
+  promises.push(entry);
+  savePromises(promises);
+  return promises;
 }
 
-export function updatePromise(
-  id: string,
-  updates: Partial<Pick<PromiseEntry, "status" | "reflection" | "tomorrowSize" | "completedAt">>
-): PromiseEntry | null {
-  const entries = readAll();
-  const index = entries.findIndex((e) => e.id === id);
-  if (index === -1) return null;
-  entries[index] = { ...entries[index], ...updates };
-  writeAll(entries);
-  return entries[index];
+export function updatePromise(updatedPromise: PromiseEntry): PromiseEntry[] {
+  const promises = getPromises();
+  const index = promises.findIndex((p) => p.id === updatedPromise.id);
+  if (index !== -1) {
+    promises[index] = updatedPromise;
+  }
+  savePromises(promises);
+  return promises;
 }

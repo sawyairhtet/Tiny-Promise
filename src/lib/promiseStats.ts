@@ -1,50 +1,52 @@
 import { PromiseEntry } from "@/types/promise";
 
-export function getCompletedCount(entries: PromiseEntry[]): number {
-  return entries.filter((e) => e.status !== "pending").length;
+export function getCompletedPromises(promises: PromiseEntry[]): PromiseEntry[] {
+  return promises.filter((p) => p.status !== "pending");
 }
 
-export function getSelfTrustScore(entries: PromiseEntry[]): number {
-  const completed = entries.filter((e) => e.status !== "pending");
-  if (completed.length === 0) return 0;
+export function calculateSelfTrustScore(
+  promises: PromiseEntry[]
+): number | null {
+  const completed = getCompletedPromises(promises);
+  if (completed.length === 0) return null;
 
-  const weights: Record<string, number> = { kept: 1, partly: 0.5, broke: 0 };
-  const total = completed.reduce((sum, e) => sum + (weights[e.status] ?? 0), 0);
-  return Math.round((total / completed.length) * 100);
+  const points = completed.reduce((sum, p) => {
+    if (p.status === "kept") return sum + 1;
+    if (p.status === "partly") return sum + 0.5;
+    return sum;
+  }, 0);
+
+  return Math.round((points / completed.length) * 100);
 }
 
-export function getLast7Completed(entries: PromiseEntry[]): PromiseEntry[] {
-  return entries
-    .filter((e) => e.status !== "pending")
+export function getLastCompletedPromises(
+  promises: PromiseEntry[],
+  count: number
+): PromiseEntry[] {
+  return getCompletedPromises(promises)
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 7);
+    .slice(0, count);
 }
 
-export function getGentleInsight(entries: PromiseEntry[]): string {
-  const completed = entries.filter((e) => e.status !== "pending");
+export function getGentleInsight(promises: PromiseEntry[]): string {
+  const completed = getCompletedPromises(promises);
   if (completed.length === 0) {
-    return "Your journey starts with one small promise. No rush.";
+    return "Start with one tiny promise. That is enough.";
   }
 
-  const recent = completed
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 7);
+  const recent = getLastCompletedPromises(promises, 3);
+  const brokeCount = recent.filter((p) => p.status === "broke").length;
+  const keptCount = recent.filter((p) => p.status === "kept").length;
+  const partlyCount = completed.filter((p) => p.status === "partly").length;
 
-  const keptCount = recent.filter((e) => e.status === "kept").length;
-  const partlyCount = recent.filter((e) => e.status === "partly").length;
-  const brokeCount = recent.filter((e) => e.status === "broke").length;
-
-  if (keptCount >= 5) {
-    return "You’ve been keeping your promises gently and consistently. That’s self-trust growing.";
+  if (brokeCount >= 2) {
+    return "Your recent promises may be too heavy. Tomorrow can be smaller.";
+  }
+  if (keptCount >= 3) {
+    return "You are building trust with yourself. Keep tomorrow realistic.";
   }
   if (partlyCount >= 3) {
-    return "Partly kept is still showing up. That matters more than perfection.";
+    return "You are showing up. Try making the promise more specific.";
   }
-  if (brokeCount >= 3) {
-    return "Some promises didn’t land lately. Tomorrow can be smaller. No shame — just notice.";
-  }
-  if (completed.length <= 3) {
-    return "You’re just getting started. Keep it small. Keep it honest.";
-  }
-  return "Self-trust is built gently, one promise at a time.";
+  return "Keep it small. Keep it honest.";
 }

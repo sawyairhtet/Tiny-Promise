@@ -3,7 +3,7 @@ export type TomorrowSize = "smaller" | "same" | "bigger";
 
 export interface PromiseEntry {
   id: string;
-  date: string; // YYYY-MM-DD
+  date: string;
   text: string;
   status: PromiseStatus;
   reflection?: string;
