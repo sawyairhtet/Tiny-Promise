@@ -24,7 +24,7 @@ export function getLastCompletedPromises(
   count: number
 ): PromiseEntry[] {
   return getCompletedPromises(promises)
-    .sort((a, b) => b.date.localeCompare(a.date))
+    .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt))
     .slice(0, count);
 }
 

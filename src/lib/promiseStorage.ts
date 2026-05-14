@@ -27,11 +27,16 @@ export function getTodayPromise(
 }
 
 export function createTodayPromise(text: string): PromiseEntry[] {
+  const trimmed = text.trim();
+  if (!trimmed) return getPromises();
+
   const promises = getPromises();
+  if (getTodayPromise(promises)) return promises;
+
   const entry: PromiseEntry = {
     id: crypto.randomUUID(),
     date: getTodayDate(),
-    text: text.trim(),
+    text: trimmed,
     status: "pending",
     createdAt: new Date().toISOString(),
   };
@@ -43,9 +48,9 @@ export function createTodayPromise(text: string): PromiseEntry[] {
 export function updatePromise(updatedPromise: PromiseEntry): PromiseEntry[] {
   const promises = getPromises();
   const index = promises.findIndex((p) => p.id === updatedPromise.id);
-  if (index !== -1) {
+  if (index !== -1 && !promises[index].completedAt) {
     promises[index] = updatedPromise;
+    savePromises(promises);
   }
-  savePromises(promises);
   return promises;
 }

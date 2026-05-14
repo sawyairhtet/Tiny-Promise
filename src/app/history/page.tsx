@@ -17,7 +17,7 @@ export default function HistoryPage() {
   }, []);
 
   if (!loaded) {
-    return <div className="pt-12 text-center text-warm-400">...</div>;
+    return <div className="pt-12 text-center text-warm-400 text-sm">Loading your promises...</div>;
   }
 
   return (

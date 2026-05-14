@@ -33,7 +33,7 @@ export default function PromiseHistoryList({ promises }: PromiseHistoryListProps
 
   return (
     <div className="space-y-3">
-      {[...promises].sort((a, b) => b.date.localeCompare(a.date)).map((p) => (
+      {[...promises].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)).map((p) => (
         <div
           key={p.id}
           className="bg-white rounded-xl border border-warm-200 p-4 space-y-2"
