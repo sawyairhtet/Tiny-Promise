@@ -18,7 +18,7 @@ const statusColors: Record<PromiseStatus, string> = {
   kept: "text-sage-600 bg-sage-50 border-sage-200",
   partly: "text-amber-500 bg-amber-50 border-amber-200",
   broke: "text-rose-400 bg-rose-50 border-rose-200",
-  pending: "text-warm-400 bg-warm-100 border-warm-200",
+  pending: "text-warm-400 bg-warm-50 border-warm-200",
 };
 
 export default function PromiseHistoryList({ promises }: PromiseHistoryListProps) {
@@ -36,12 +36,12 @@ export default function PromiseHistoryList({ promises }: PromiseHistoryListProps
       {[...promises].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)).map((p) => (
         <div
           key={p.id}
-          className="bg-white rounded-xl border border-warm-200 p-4 space-y-2"
+          className="bg-white rounded-2xl border border-warm-200 p-4 shadow-soft space-y-2"
         >
           <div className="flex items-center justify-between">
             <span className="text-warm-400 text-sm">{formatDisplayDate(p.date)}</span>
             <span
-              className={`rounded-full border px-3 py-0.5 text-xs font-medium ${statusColors[p.status]}`}
+              className={`rounded-full border px-3 py-1 text-xs font-medium ${statusColors[p.status]}`}
             >
               {statusLabels[p.status]}
             </span>

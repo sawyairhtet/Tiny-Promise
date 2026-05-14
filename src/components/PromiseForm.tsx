@@ -41,7 +41,7 @@ export default function PromiseForm({ onCreate }: PromiseFormProps) {
         placeholder="Today I promise to..."
         rows={3}
         maxLength={200}
-        className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"
+        className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 shadow-soft placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"
       />
 
       <div className="flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export default function PromiseForm({ onCreate }: PromiseFormProps) {
             key={example}
             type="button"
             onClick={() => setText(example)}
-            className="rounded-full border border-warm-200 bg-white px-3 py-1.5 text-xs text-warm-500 transition-colors hover:border-sage-300 hover:text-sage-600"
+            className="rounded-full border border-warm-200 bg-white px-3 py-1.5 text-xs text-warm-500 transition-colors hover:border-sage-300 hover:text-sage-600 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300"
           >
             {example}
           </button>
@@ -60,9 +60,9 @@ export default function PromiseForm({ onCreate }: PromiseFormProps) {
       <button
         type="submit"
         disabled={!text.trim()}
-        className="w-full rounded-xl bg-sage-500 py-3 text-white font-medium transition-colors hover:bg-sage-600 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full rounded-xl bg-sage-500 py-3 text-white font-medium shadow-soft transition-colors hover:bg-sage-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300 disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        Make Promise
+        I promise
       </button>
     </form>
   );

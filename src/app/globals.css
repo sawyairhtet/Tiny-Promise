@@ -36,6 +36,13 @@
   --color-rose-300: #d48f8f;
   --color-rose-400: #c06b6b;
   --color-rose-500: #a05555;
+
+  --shadow-soft: 0 1px 3px rgba(54, 45, 34, 0.06), 0 1px 2px rgba(54, 45, 34, 0.04);
+}
+
+::selection {
+  background: var(--color-sage-100);
+  color: var(--color-warm-900);
 }
 
 body {

@@ -56,7 +56,7 @@ export default function CheckInForm({
         placeholder="Write a few words, or leave it blank."
         rows={3}
         maxLength={300}
-        className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"
+        className="w-full rounded-xl border border-warm-200 bg-white px-4 py-3 text-warm-800 shadow-soft placeholder:text-warm-300 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent resize-none"
       />
 
       <div className="space-y-2">
@@ -69,7 +69,7 @@ export default function CheckInForm({
               key={opt.value}
               type="button"
               onClick={() => setTomorrowSize(opt.value)}
-              className={`flex-1 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
+              className={`flex-1 rounded-xl border px-3 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300 ${
                 tomorrowSize === opt.value
                   ? "border-sage-400 bg-sage-50 text-sage-700 font-medium"
                   : "border-warm-200 bg-white text-warm-500 hover:border-warm-300"
@@ -84,16 +84,16 @@ export default function CheckInForm({
       <div className="space-y-3">
         <button
           type="submit"
-          className="w-full rounded-xl bg-sage-500 py-3 text-white font-medium transition-colors hover:bg-sage-600"
+          className="w-full rounded-xl bg-sage-500 py-3 text-white font-medium shadow-soft transition-colors hover:bg-sage-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300"
         >
-          Save Check-in
+          Save reflection
         </button>
 
         {onCancel && (
           <button
             type="button"
             onClick={onCancel}
-            className="w-full rounded-xl border border-warm-200 bg-white py-3 text-warm-400 text-sm transition-colors hover:text-warm-600 hover:border-warm-300"
+            className="w-full rounded-xl border border-warm-200 bg-white py-3 text-warm-400 text-sm transition-colors hover:text-warm-600 hover:border-warm-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300"
           >
             Go back
           </button>

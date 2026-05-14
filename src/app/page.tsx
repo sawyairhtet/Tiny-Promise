@@ -65,7 +65,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="pt-8">
+    <div className="pt-6">
       {phase === "new" && (
         <>
           <div className="text-center space-y-1 mb-6">

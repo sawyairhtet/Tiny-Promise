@@ -25,13 +25,16 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               prefetch={false}
-              className={`flex-1 py-4 text-center text-sm transition-colors ${
+              className={`flex-1 py-5 text-center text-sm transition-colors focus-visible:outline-none focus-visible:text-sage-600 ${
                 isActive
                   ? "text-sage-600 font-semibold"
                   : "text-warm-400 hover:text-warm-600"
               }`}
             >
-              {item.label}
+              <span>{item.label}</span>
+              {isActive && (
+                <span className="block mx-auto mt-1 h-1 w-1 rounded-full bg-sage-500" />
+              )}
             </Link>
           );
         })}

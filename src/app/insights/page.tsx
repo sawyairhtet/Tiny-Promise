@@ -21,7 +21,7 @@ export default function InsightsPage() {
   }
 
   return (
-    <div className="pt-4">
+    <div className="pt-6">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-warm-700">Gentle Insights</h2>
         <p className="text-warm-400 text-sm mt-1">Notice patterns without judging yourself.</p>

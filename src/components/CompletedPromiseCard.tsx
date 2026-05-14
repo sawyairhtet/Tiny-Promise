@@ -30,7 +30,7 @@ export default function CompletedPromiseCard({
   promise,
 }: CompletedPromiseCardProps) {
   return (
-    <div className="rounded-2xl border border-warm-200 bg-white p-6 space-y-6 text-center">
+    <div className="rounded-2xl border border-warm-200 bg-white p-6 shadow-soft space-y-6 text-center">
       <div className="space-y-2">
         <p className="text-warm-400 text-sm">Today&apos;s Promise</p>
         <p className="text-warm-800 text-xl leading-relaxed">
@@ -39,7 +39,7 @@ export default function CompletedPromiseCard({
       </div>
 
       <div
-        className={`inline-block rounded-full border px-4 py-1 text-sm font-medium ${statusColors[promise.status]}`}
+        className={`inline-block rounded-full border px-3 py-1 text-xs font-medium ${statusColors[promise.status]}`}
       >
         {statusLabels[promise.status]}
       </div>

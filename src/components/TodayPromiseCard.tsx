@@ -33,7 +33,7 @@ export default function TodayPromiseCard({
   onSelectStatus,
 }: TodayPromiseCardProps) {
   return (
-    <div className="space-y-6">
+    <div className="rounded-2xl border border-warm-200 bg-white p-6 shadow-soft space-y-6">
       <div className="text-center space-y-2">
         <p className="text-warm-400 text-sm">Today&apos;s Promise</p>
         <p className="text-warm-800 text-xl leading-relaxed">
@@ -42,7 +42,7 @@ export default function TodayPromiseCard({
       </div>
 
       <p className="text-center text-warm-400 text-sm">
-        No shame. Just honesty.
+        Be honest with yourself.
       </p>
 
       <div className="space-y-3">
@@ -50,7 +50,7 @@ export default function TodayPromiseCard({
           <button
             key={btn.status}
             onClick={() => onSelectStatus(btn.status)}
-            className={`w-full rounded-xl border px-4 py-3 font-medium transition-colors ${btn.style}`}
+            className={`w-full rounded-xl border px-4 py-3 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-300 ${btn.style}`}
           >
             {btn.label}
           </button>
