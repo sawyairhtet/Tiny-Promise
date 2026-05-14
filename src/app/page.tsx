@@ -68,7 +68,7 @@ export default function HomePage() {
     <div className="pt-8">
       {phase === "new" && <PromiseForm onCreate={handleCreate} />}
       {phase === "pending" && promise && (
-        <TodayPromiseCard promise={promise} onCheckIn={handleCheckIn} />
+        <TodayPromiseCard promise={promise} onSelectStatus={handleCheckIn} />
       )}
       {phase === "checking-in" && promise && (
         <CheckInForm
