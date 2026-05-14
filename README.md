@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tiny Promise
+
+A minimalist daily commitment app that helps you build self-trust — one small promise at a time.
+
+---
+
+## Philosophy
+
+Most productivity tools ask you to do more. Tiny Promise asks you to do less — but mean it.
+
+Make one small promise each day. Check in honestly. Reflect briefly. Over time, the habit of keeping your word to yourself becomes something quietly powerful.
+
+No streaks. No guilt. Just honesty.
+
+## Features
+
+- **One promise per day** — focused, intentional, achievable
+- **Honest check-ins** — mark your promise as kept, partly kept, or broken
+- **Brief reflections** — capture what happened in a sentence or two
+- **Tomorrow sizing** — decide if your next promise should be smaller, the same, or bigger
+- **Self-trust score** — a gentle metric based on your follow-through patterns
+- **Adaptive insights** — the app notices trends and offers kind, practical nudges
+- **Promise history** — scroll through your journey, one day at a time
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js](https://nextjs.org) (App Router) |
+| Language | [TypeScript](https://typescriptlang.org) |
+| Styling | [Tailwind CSS](https://tailwindcss.com) |
+| Storage | Browser `localStorage` |
+| Backend | None (MVP is fully client-side) |
+
+All data stays in your browser. Nothing is sent to a server.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd tiny-promise
+
+# Install dependencies
+npm install
+
+# Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build for production |
+| `npm start` | Start the production server |
+| `npm run lint` | Run ESLint |
 
-## Learn More
+## Folder Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── page.tsx              # Today — the main promise flow
+│   ├── history/page.tsx      # Promise history list
+│   ├── insights/page.tsx     # Self-trust score and insights
+│   ├── layout.tsx            # Root layout with navigation
+│   └── globals.css           # Tailwind theme and custom styles
+├── components/
+│   ├── PromiseForm.tsx       # Create a new promise
+│   ├── TodayPromiseCard.tsx  # Active promise with check-in
+│   ├── CheckInForm.tsx       # Reflection and tomorrow sizing
+│   ├── CompletedPromiseCard.tsx
+│   ├── PromiseHistoryList.tsx
+│   ├── InsightCards.tsx      # Stats and adaptive messages
+│   ├── Navigation.tsx        # Bottom tab bar
+│   └── AppShell.tsx          # Layout wrapper
+├── lib/
+│   ├── promiseStorage.ts     # localStorage read/write
+│   ├── promiseStats.ts       # Score and insight calculations
+│   └── dateUtils.ts          # Date formatting helpers
+└── types/
+    └── promise.ts            # TypeScript type definitions
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Future Ideas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Cloud sync so promises travel across devices
+- Notification reminders for evening check-ins
+- Weekly and monthly reflection summaries
+- Theming options (dark mode, seasonal palettes)
+- Export promise history as a journal
+- PWA support for a native-app feel
 
-## Deploy on Vercel
+## Screenshots
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> _Screenshots coming soon._
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Built with care by [Saw Ye Htet](mailto:minwn2244@gmail.com).
