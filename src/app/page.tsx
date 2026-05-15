@@ -7,6 +7,10 @@ import PromiseForm from "@/components/PromiseForm";
 import TodayPromiseCard from "@/components/TodayPromiseCard";
 import CheckInForm from "@/components/CheckInForm";
 import CompletedPromiseCard from "@/components/CompletedPromiseCard";
+import type { GardenPlant } from "@/types/garden";
+import { getGarden, addPlant } from "@/lib/gardenStorage";
+import { generatePlant } from "@/lib/gardenGenerator";
+import GardenScene from "@/components/garden/GardenScene";
 
 type Phase = "loading" | "new" | "pending" | "checking-in" | "completed";
 
@@ -14,6 +18,7 @@ export default function HomePage() {
   const [promise, setPromise] = useState<PromiseEntry | null>(null);
   const [phase, setPhase] = useState<Phase>("loading");
   const [checkInStatus, setCheckInStatus] = useState<PromiseStatus>("kept");
+  const [plants, setPlants] = useState<GardenPlant[]>([]);
 
   const load = useCallback(() => {
     const promises = getPromises();
@@ -26,6 +31,7 @@ export default function HomePage() {
     } else {
       setPhase("completed");
     }
+    setPlants(getGarden());
   }, []);
 
   useEffect(() => {
@@ -58,6 +64,9 @@ export default function HomePage() {
     updatePromise(updatedEntry);
     setPromise(updatedEntry);
     setPhase("completed");
+    if (checkInStatus === "kept") {
+      setPlants(addPlant(generatePlant(updatedEntry)));
+    }
   }
 
   if (phase === "loading") {
@@ -86,6 +95,9 @@ export default function HomePage() {
         />
       )}
       {phase === "completed" && promise && <CompletedPromiseCard promise={promise} />}
+      <div className="mt-6">
+        <GardenScene plants={plants} />
+      </div>
     </div>
   );
 }
