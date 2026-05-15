@@ -1,4 +1,4 @@
-import { PromiseEntry } from "@/types/promise";
+import { PromiseEntry, PromiseCategory } from "@/types/promise";
 import { getTodayDate } from "./dateUtils";
 
 const STORAGE_KEY = "tiny-promise.entries";
@@ -53,4 +53,29 @@ export function updatePromise(updatedPromise: PromiseEntry): PromiseEntry[] {
     savePromises(promises);
   }
   return promises;
+}
+
+export const MAX_PROMISES_PER_CATEGORY = 5;
+
+export function getPromisesByDate(date: string): {
+  self: PromiseEntry[];
+  others: PromiseEntry[];
+} {
+  const all = getPromises();
+  const forDate = all.filter((p) => p.date === date);
+  return {
+    self: forDate.filter((p) => p.category === "self"),
+    others: forDate.filter((p) => p.category === "others"),
+  };
+}
+
+export function migratePromises(): void {
+  if (typeof window === "undefined") return;
+  const all = getPromises();
+  const needsMigration = all.some((p) => !p.category);
+  if (!needsMigration) return;
+  const migrated = all.map((p) =>
+    p.category ? p : { ...p, category: "self" as PromiseCategory }
+  );
+  savePromises(migrated);
 }

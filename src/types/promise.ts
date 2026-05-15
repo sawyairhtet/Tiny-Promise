@@ -1,5 +1,6 @@
 export type PromiseStatus = "pending" | "kept" | "partly" | "broke";
 export type TomorrowSize = "smaller" | "same" | "bigger";
+export type PromiseCategory = "self" | "others";
 
 export interface PromiseEntry {
   id: string;
@@ -10,4 +11,5 @@ export interface PromiseEntry {
   tomorrowSize?: TomorrowSize;
   createdAt: string;
   completedAt?: string;
+  category: PromiseCategory;
 }
