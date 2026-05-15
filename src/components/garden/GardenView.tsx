@@ -1,17 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadPlants } from "@/lib/gardenStorage";
-import type { PlantRecipe } from "@/types/garden";
+import { loadPlants, clearGarden } from "@/lib/gardenStorage";
+import type { PlantRecipe, WeatherEffect } from "@/types/garden";
 import SkyLayer from "./SkyLayer";
 import PlantSVG from "./PlantSVG";
+import WeatherLayer from "./WeatherLayer";
+import GardenControls, { nextWeather } from "./GardenControls";
+
+const WEATHER_KEY = "tiny-promise-weather-v1";
 
 export default function GardenView() {
   const [plants, setPlants] = useState<PlantRecipe[]>([]);
+  const [weather, setWeather] = useState<WeatherEffect | null>(null);
 
   useEffect(() => {
     setPlants(loadPlants());
+    const saved = localStorage.getItem(WEATHER_KEY);
+    if (saved) setWeather(saved as WeatherEffect);
   }, []);
+
+  function handleCycleWeather() {
+    const next = nextWeather(weather);
+    setWeather(next);
+    if (next) {
+      localStorage.setItem(WEATHER_KEY, next);
+    } else {
+      localStorage.removeItem(WEATHER_KEY);
+    }
+  }
+
+  function handleClearGarden() {
+    clearGarden();
+    setPlants([]);
+  }
 
   const sorted = [...plants].sort((a, b) => a.createdAt - b.createdAt);
 
@@ -32,6 +54,12 @@ export default function GardenView() {
       `}</style>
 
       <SkyLayer />
+      <WeatherLayer effect={weather} />
+      <GardenControls
+        currentWeather={weather}
+        onCycleWeather={handleCycleWeather}
+        onClearGarden={handleClearGarden}
+      />
 
       {sorted.map((recipe, i) => (
         <div
