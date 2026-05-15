@@ -39,6 +39,7 @@ export function createTodayPromise(text: string): PromiseEntry[] {
     text: trimmed,
     status: "pending",
     createdAt: new Date().toISOString(),
+    category: "self",
   };
   promises.push(entry);
   savePromises(promises);
