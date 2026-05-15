@@ -7,10 +7,9 @@ import PromiseForm from "@/components/PromiseForm";
 import TodayPromiseCard from "@/components/TodayPromiseCard";
 import CheckInForm from "@/components/CheckInForm";
 import CompletedPromiseCard from "@/components/CompletedPromiseCard";
-import type { GardenPlant } from "@/types/garden";
-import { getGarden, addPlant } from "@/lib/gardenStorage";
-import { generatePlant } from "@/lib/gardenGenerator";
-import GardenScene from "@/components/garden/GardenScene";
+import { addPlant } from "@/lib/gardenStorage";
+import { generatePlantRecipe } from "@/lib/gardenGenerator";
+import Link from "next/link";
 
 type Phase = "loading" | "new" | "pending" | "checking-in" | "completed";
 
@@ -18,7 +17,7 @@ export default function HomePage() {
   const [promise, setPromise] = useState<PromiseEntry | null>(null);
   const [phase, setPhase] = useState<Phase>("loading");
   const [checkInStatus, setCheckInStatus] = useState<PromiseStatus>("kept");
-  const [plants, setPlants] = useState<GardenPlant[]>([]);
+  const [gardenGrew, setGardenGrew] = useState(false);
 
   const load = useCallback(() => {
     const promises = getPromises();
@@ -31,7 +30,7 @@ export default function HomePage() {
     } else {
       setPhase("completed");
     }
-    setPlants(getGarden());
+    setGardenGrew(false);
   }, []);
 
   useEffect(() => {
@@ -65,7 +64,9 @@ export default function HomePage() {
     setPromise(updatedEntry);
     setPhase("completed");
     if (checkInStatus === "kept") {
-      setPlants(addPlant(generatePlant(updatedEntry)));
+      const recipe = generatePlantRecipe(updatedEntry.id);
+      addPlant(recipe);
+      setGardenGrew(true);
     }
   }
 
@@ -95,9 +96,13 @@ export default function HomePage() {
         />
       )}
       {phase === "completed" && promise && <CompletedPromiseCard promise={promise} />}
-      <div className="mt-6">
-        <GardenScene plants={plants} />
-      </div>
+      {gardenGrew && (
+        <p className="mt-4 text-center text-sm text-sage-500">
+          <Link href="/garden" className="underline hover:text-sage-700 transition-colors">
+            Your garden grew
+          </Link>
+        </p>
+      )}
     </div>
   );
 }
