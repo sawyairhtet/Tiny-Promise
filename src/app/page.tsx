@@ -12,8 +12,6 @@ import {
 } from "@/lib/promiseStorage";
 import { getTodayDate } from "@/lib/dateUtils";
 import CheckInForm from "@/components/CheckInForm";
-import { addPlant } from "@/lib/gardenStorage";
-import { generatePlantRecipe } from "@/lib/gardenGenerator";
 import Link from "next/link";
 
 const CATEGORIES: { key: PromiseCategory; label: string; addLabel: string; color: string }[] = [
@@ -46,7 +44,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    load();
+    queueMicrotask(load);
   }, [load]);
 
   function handleAddPromise(category: PromiseCategory) {
@@ -95,8 +93,6 @@ export default function HomePage() {
     updatePromise(updatedEntry);
 
     if (checkInStatus === "kept") {
-      const recipe = generatePlantRecipe(updatedEntry.id);
-      addPlant(recipe);
       setGardenGrew(true);
     }
 
