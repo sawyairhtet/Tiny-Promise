@@ -1,25 +1,25 @@
 export const SKY = {
-  zenith: "#0B1340",
-  mid: "#3C2562",
-  horizon: "#7E4A6C",
-  canvasClear: "#0B1340",
-  star: "#F4E5D6",
-  moonCore: "#F4E5D6",
-  moonHalo: "#F4E5D6",
+  zenith: "#140F34",
+  mid: "#3F2A60",
+  horizon: "#B76B7B",
+  canvasClear: "#140F34",
+  star: "#FFE7B5",
+  moonCore: "#FFF1D8",
+  moonHalo: "#FFD6A6",
 } as const;
 
 export const GROUND = {
-  planter: "#1A0F0A",
-  fogCenter: "#2C1F3D",
-  fogEdge: "rgba(44, 31, 61, 0)",
+  planter: "#32213A",
+  fogCenter: "#61436A",
+  fogEdge: "rgba(97, 67, 106, 0)",
 } as const;
 
 export const LIGHTS = {
-  hemiSky: "#9C8CC7",
-  hemiGround: "#3A2540",
-  moon: "#D6E0FF",
-  warmRim: "#FFB37A",
-  ambient: "#3A2540",
+  hemiSky: "#C5B5F1",
+  hemiGround: "#5C3A54",
+  moon: "#EDF0FF",
+  warmRim: "#FFC08A",
+  ambient: "#8A5C78",
 } as const;
 
 export const ATMOSPHERE = {

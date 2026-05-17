@@ -7,7 +7,7 @@ import { mulberry32 } from "../flowers/parts/random";
 const GRASS_COUNT = 60;
 const GRASS_RING_RADIUS = 3.45;
 const GRASS_RING_JITTER = 0.45;
-const TALL_STEMS = 4;
+const TALL_STEMS = 0;
 
 export default function BackgroundFoliage() {
   const grassRef = useRef<THREE.InstancedMesh>(null);

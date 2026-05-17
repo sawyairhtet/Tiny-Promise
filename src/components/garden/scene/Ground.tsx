@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
 import { CanvasTexture, Color } from "three";
 import { GROUND } from "../config/palette";
 
@@ -45,21 +46,36 @@ function buildFogTexture(): CanvasTexture | null {
   return tex;
 }
 
-export default function Ground() {
+interface Props {
+  onPlanterClick?: () => void;
+}
+
+export default function Ground({ onPlanterClick }: Props) {
   const fogTexture = useMemo(() => buildFogTexture(), []);
 
   return (
-    <group>
+    <group
+      onClick={(e: ThreeEvent<MouseEvent>) => {
+        e.stopPropagation();
+        onPlanterClick?.();
+      }}
+    >
       <mesh
         position={[0, PLANTER_HEIGHT / 2 - 0.02, 0]}
         castShadow
         receiveShadow
+        onClick={(e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          onPlanterClick?.();
+        }}
       >
         <cylinderGeometry
           args={[PLANTER_RADIUS, PLANTER_BASE_RADIUS, PLANTER_HEIGHT, 64]}
         />
         <meshStandardMaterial
           color={GROUND.planter}
+          emissive="#120A18"
+          emissiveIntensity={0.12}
           roughness={0.95}
           metalness={0}
         />

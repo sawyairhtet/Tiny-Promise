@@ -170,11 +170,11 @@ function Moon() {
   return (
     <group position={[8, 6, -18]}>
       <mesh>
-        <circleGeometry args={[1.6, 64]} />
+        <circleGeometry args={[2.2, 64]} />
         <meshBasicMaterial
           color={SKY.moonHalo}
           transparent
-          opacity={0.18}
+          opacity={0.1}
           toneMapped={false}
           depthWrite={false}
           fog={false}
@@ -184,7 +184,10 @@ function Moon() {
         <circleGeometry args={[0.95, 64]} />
         <meshBasicMaterial
           color={SKY.moonCore}
+          transparent
+          opacity={0.52}
           toneMapped={false}
+          depthWrite={false}
           fog={false}
         />
       </mesh>

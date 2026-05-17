@@ -40,7 +40,9 @@ export default function FlowerLabel({ promise, pinned, onClose }: Props) {
       <div
         style={{
           position: "relative",
-          maxWidth: "220px",
+          width: "max-content",
+          minWidth: "168px",
+          maxWidth: "260px",
           textAlign: "left",
           padding: "12px",
           paddingRight: pinned ? "26px" : "12px",
@@ -67,6 +69,7 @@ export default function FlowerLabel({ promise, pinned, onClose }: Props) {
             fontFeatureSettings: '"smcp"',
             textTransform: "uppercase",
             letterSpacing: "0.08em",
+            whiteSpace: "nowrap",
           }}
         >
           {dateText}

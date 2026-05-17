@@ -8,15 +8,15 @@ const STORAGE_KEY = "tiny-promise.entries";
 const EMPTY: PromiseEntry[] = [];
 
 let cachedRaw: string | null = null;
-let cachedKept: PromiseEntry[] = EMPTY;
+let cachedGardenPromises: PromiseEntry[] = EMPTY;
 
-function readKept(): PromiseEntry[] {
+function readGardenPromises(): PromiseEntry[] {
   if (typeof window === "undefined") return EMPTY;
   const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === cachedRaw) return cachedKept;
+  if (raw === cachedRaw) return cachedGardenPromises;
   cachedRaw = raw;
-  cachedKept = getPromises().filter((p) => p.status === "kept");
-  return cachedKept;
+  cachedGardenPromises = getPromises().filter((p) => p.status !== "pending");
+  return cachedGardenPromises;
 }
 
 function subscribe(notify: () => void): () => void {
@@ -29,5 +29,5 @@ function subscribe(notify: () => void): () => void {
 }
 
 export function useGardenPromises(): PromiseEntry[] {
-  return useSyncExternalStore(subscribe, readKept, () => EMPTY);
+  return useSyncExternalStore(subscribe, readGardenPromises, () => EMPTY);
 }

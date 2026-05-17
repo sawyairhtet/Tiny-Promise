@@ -4,8 +4,10 @@ import { useThree } from "@react-three/fiber";
 import {
   Bloom,
   EffectComposer,
+  ToneMapping,
   Vignette,
 } from "@react-three/postprocessing";
+import { ToneMappingMode } from "postprocessing";
 import {
   MIN_GL_TEXTURE_SIZE_FOR_POST,
   MOBILE_BREAKPOINT_PX,
@@ -36,6 +38,7 @@ export default function Effects({ reducedMotion }: Props) {
         luminanceSmoothing={0.4}
       />
       <Vignette eskil={false} offset={0.2} darkness={0.7} />
+      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
     </EffectComposer>
   );
 }

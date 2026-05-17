@@ -30,7 +30,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
     return [...promises].sort((a, b) => {
       const ad = a.completedAt ?? a.date;
       const bd = b.completedAt ?? b.date;
-      return bd.localeCompare(ad);
+      return ad.localeCompare(bd);
     });
   }, [promises]);
 
@@ -56,12 +56,14 @@ export default function GardenList({ promises, defaultOpen }: Props) {
   return (
     <section
       style={{
-        marginTop: "16px",
-        borderRadius: "14px",
-        border: "1px solid rgba(245, 230, 208, 0.18)",
-        background: "rgba(15, 12, 40, 0.4)",
+        marginTop: "4px",
+        borderRadius: "16px",
+        border: "1px solid rgba(245, 230, 208, 0.22)",
+        background:
+          "linear-gradient(180deg, rgba(24, 17, 48, 0.96), rgba(48, 34, 69, 0.94))",
         color: "#F5E6D0",
         overflow: "hidden",
+        boxShadow: "0 12px 28px rgba(16, 10, 36, 0.18)",
       }}
       aria-label="Garden list"
     >
@@ -79,7 +81,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
           textAlign: "left",
           fontFamily:
             "var(--font-garden-serif), 'Cormorant Garamond', 'Fraunces', serif",
-          fontSize: "15px",
+          fontSize: "17px",
           letterSpacing: "0.03em",
           display: "flex",
           alignItems: "center",
@@ -103,7 +105,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
           style={{
             marginLeft: "auto",
             fontSize: "12px",
-            opacity: 0.65,
+            opacity: 0.8,
             letterSpacing: "0.06em",
           }}
         >
@@ -118,9 +120,10 @@ export default function GardenList({ promises, defaultOpen }: Props) {
           style={{
             listStyle: "none",
             margin: 0,
-            padding: "4px 0 12px",
-            maxHeight: "320px",
+            padding: "4px 0 96px",
+            maxHeight: "min(320px, max(180px, calc(100dvh - 820px)))",
             overflowY: "auto",
+            scrollbarColor: "rgba(245, 230, 208, 0.35) transparent",
           }}
         >
           {sorted.length === 0 && (
@@ -165,7 +168,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
                   outline: "none",
                   background:
                     isFocused || isPinned
-                      ? "rgba(245, 230, 208, 0.08)"
+                      ? "rgba(245, 230, 208, 0.12)"
                       : "transparent",
                   borderLeft: isPinned
                     ? "2px solid #F5E6D0"
@@ -187,7 +190,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
                   <div
                     style={{
                       fontSize: "11px",
-                      opacity: 0.7,
+                      opacity: 0.82,
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       marginBottom: "2px",
@@ -203,6 +206,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
                       fontStyle: "italic",
                       lineHeight: 1.35,
                       wordBreak: "break-word",
+                      color: "#FFF3DD",
                     }}
                   >
                     {p.text}
@@ -211,7 +215,7 @@ export default function GardenList({ promises, defaultOpen }: Props) {
                     style={{
                       marginTop: "4px",
                       fontSize: "11px",
-                      opacity: 0.85,
+                      opacity: 0.95,
                       display: "flex",
                       alignItems: "center",
                       gap: "6px",

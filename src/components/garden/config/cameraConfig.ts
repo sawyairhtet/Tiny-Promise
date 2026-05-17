@@ -1,18 +1,18 @@
 import { MathUtils } from "three";
 
 export const CAMERA = {
-  position: [0, 2.4, 6.2] as [number, number, number],
-  fov: 32,
+  position: [0, 2.55, 5.85] as [number, number, number],
+  fov: 35,
   near: 0.1,
   far: 60,
 };
 
 export const ORBIT = {
-  target: [0, 0.55, 0] as [number, number, number],
+  target: [0, 0.76, 0] as [number, number, number],
   enablePan: false,
   enableZoom: true,
-  minDistance: 4,
-  maxDistance: 11,
+  minDistance: 3.8,
+  maxDistance: 9,
   minPolarAngle: Math.PI * 0.18,
   maxPolarAngle: Math.PI * 0.48,
   autoRotate: true,
@@ -26,8 +26,8 @@ export const IDLE_RESUME_MS = 4000;
 export const MOBILE_BREAKPOINT_PX = 768;
 
 export const MOBILE_OVERRIDES = {
-  fov: 40,
-  maxDistance: 9,
+  fov: 44,
+  maxDistance: 8,
   target: [0, 0.85, 0] as [number, number, number],
 };
 

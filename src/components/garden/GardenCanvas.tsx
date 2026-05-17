@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Preload } from "@react-three/drei";
@@ -8,7 +9,10 @@ import GardenScene from "./GardenScene";
 import {
   CAMERA,
   IDLE_RESUME_MS,
+  MIN_GL_TEXTURE_SIZE_FOR_POST,
+  MOBILE_BREAKPOINT_PX,
   ORBIT,
+  POST_PROCESSING_ENABLED,
   REDUCED_MOTION_CAMERA,
   pickCameraFov,
   pickOrbitMaxDistance,
@@ -17,19 +21,27 @@ import {
 import { SKY } from "./config/palette";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { selectionActions } from "./hooks/useSelectionStore";
-import Effects from "./scene/Effects";
+
+const MOBILE_ANIMATION_FPS = 30;
+const DESKTOP_ANIMATION_FPS = 45;
+
+const Effects = dynamic(() => import("./scene/Effects"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function GardenCanvas() {
   const reducedMotion = useReducedMotion();
-  const initialFrameloop: "always" | "demand" = reducedMotion
-    ? "demand"
-    : "always";
 
   return (
     <Canvas
       shadows="soft"
       dpr={[1, 2]}
-      frameloop={initialFrameloop}
+      frameloop="demand"
+      style={{
+        display: "block",
+        borderRadius: "24px",
+      }}
       gl={{
         antialias: true,
         powerPreference: "high-performance",
@@ -47,12 +59,54 @@ export default function GardenCanvas() {
       <Suspense fallback={null}>
         <ResponsiveCamera reducedMotion={reducedMotion} />
         <CameraRig reducedMotion={reducedMotion} />
+        <AnimationTicker reducedMotion={reducedMotion} />
         <GardenScene reducedMotion={reducedMotion} />
-        <Effects reducedMotion={reducedMotion} />
+        <EffectsSlot reducedMotion={reducedMotion} />
         <Preload all />
       </Suspense>
     </Canvas>
   );
+}
+
+function EffectsSlot({ reducedMotion }: { reducedMotion: boolean }) {
+  const width = useThree((state) => state.size.width);
+  const maxTextureSize = useThree(
+    (state) => state.gl.capabilities.maxTextureSize ?? 0,
+  );
+
+  if (!POST_PROCESSING_ENABLED) return null;
+  if (reducedMotion) return null;
+  if (width < MOBILE_BREAKPOINT_PX) return null;
+  if (maxTextureSize < MIN_GL_TEXTURE_SIZE_FOR_POST) return null;
+
+  return <Effects reducedMotion={reducedMotion} />;
+}
+
+function AnimationTicker({ reducedMotion }: { reducedMotion: boolean }) {
+  const width = useThree((state) => state.size.width);
+  const invalidate = useThree((state) => state.invalidate);
+  const targetFps =
+    width < MOBILE_BREAKPOINT_PX ? MOBILE_ANIMATION_FPS : DESKTOP_ANIMATION_FPS;
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    let frameId = 0;
+    let lastFrame = 0;
+    const minFrameMs = 1000 / targetFps;
+
+    const tick = (now: number) => {
+      if (now - lastFrame >= minFrameMs) {
+        lastFrame = now;
+        invalidate();
+      }
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [invalidate, reducedMotion, targetFps]);
+
+  return null;
 }
 
 function ResponsiveCamera({ reducedMotion }: { reducedMotion: boolean }) {
@@ -87,9 +141,9 @@ function CameraRig({ reducedMotion }: CameraRigProps) {
   );
 
   useEffect(() => {
-    setFrameloop(reducedMotion ? "demand" : "always");
+    setFrameloop("demand");
     invalidate();
-  }, [reducedMotion, setFrameloop, invalidate]);
+  }, [setFrameloop, invalidate]);
 
   useEffect(() => {
     const controls = controlsRef.current;
@@ -140,7 +194,8 @@ function CameraRig({ reducedMotion }: CameraRigProps) {
       makeDefault
       target={initialTarget}
       enablePan={ORBIT.enablePan}
-      enableZoom={ORBIT.enableZoom}
+      enableZoom={!reducedMotion && ORBIT.enableZoom}
+      enableRotate={!reducedMotion}
       minDistance={ORBIT.minDistance}
       maxDistance={pickOrbitMaxDistance(width)}
       minPolarAngle={ORBIT.minPolarAngle}

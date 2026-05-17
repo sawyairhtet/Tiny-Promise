@@ -15,6 +15,9 @@ const FIREFLY_RADIUS = 0.012;
 
 const BODY_COLOR = "#F8D88A";
 const BASE_EMISSIVE = 1.4;
+const MIN_EMISSIVE = 0.4;
+const MAX_EMISSIVE = 1.4;
+const EMISSIVE_ATTRIBUTE = "instanceEmissiveScale";
 
 interface FireflyConfig {
   origin: THREE.Vector3;
@@ -68,26 +71,55 @@ export default function Fireflies({ reducedMotion }: Props) {
   const fireflies = useMemo(() => buildFireflies(), []);
 
   const tempObject = useMemo(() => new THREE.Object3D(), []);
-  const tempColor = useMemo(() => new THREE.Color(), []);
-  const baseColor = useMemo(() => new THREE.Color(BODY_COLOR), []);
 
   const material = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
+    () => {
+      const mat = new THREE.MeshStandardMaterial({
         color: BODY_COLOR,
         emissive: BODY_COLOR,
         emissiveIntensity: BASE_EMISSIVE,
         roughness: 0.4,
         metalness: 0,
         toneMapped: false,
-      }),
+      });
+      mat.onBeforeCompile = (shader) => {
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <common>",
+          `#include <common>
+          attribute float ${EMISSIVE_ATTRIBUTE};
+          varying float vFireflyEmissiveScale;`,
+        );
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <begin_vertex>",
+          `#include <begin_vertex>
+          vFireflyEmissiveScale = ${EMISSIVE_ATTRIBUTE};`,
+        );
+        shader.fragmentShader = shader.fragmentShader.replace(
+          "#include <common>",
+          `#include <common>
+          varying float vFireflyEmissiveScale;`,
+        );
+        shader.fragmentShader = shader.fragmentShader.replace(
+          "vec3 totalEmissiveRadiance = emissive;",
+          "vec3 totalEmissiveRadiance = emissive * vFireflyEmissiveScale;",
+        );
+      };
+      mat.customProgramCacheKey = () => "garden-firefly-instance-emissive";
+      return mat;
+    },
     [],
   );
 
-  const geometry = useMemo(
-    () => new THREE.SphereGeometry(FIREFLY_RADIUS, 8, 8),
-    [],
-  );
+  const geometry = useMemo(() => {
+    const geom = new THREE.SphereGeometry(FIREFLY_RADIUS, 8, 8);
+    const attr = new THREE.InstancedBufferAttribute(
+      new Float32Array(COUNT),
+      1,
+    );
+    attr.setUsage(THREE.DynamicDrawUsage);
+    geom.setAttribute(EMISSIVE_ATTRIBUTE, attr);
+    return geom;
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -100,21 +132,31 @@ export default function Fireflies({ reducedMotion }: Props) {
     if (reducedMotion) return;
     const mesh = meshRef.current;
     if (!mesh) return;
+    const emissiveAttribute = mesh.geometry.getAttribute(
+      EMISSIVE_ATTRIBUTE,
+    ) as THREE.InstancedBufferAttribute | undefined;
+    if (!emissiveAttribute) return;
+    mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     for (let i = 0; i < fireflies.length; i++) {
       const f = fireflies[i];
       tempObject.position.copy(f.origin);
+      tempObject.scale.setScalar(1);
       tempObject.updateMatrix();
       mesh.setMatrixAt(i, tempObject.matrix);
-      mesh.setColorAt(i, baseColor);
+      emissiveAttribute.setX(i, 1);
     }
     mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  }, [fireflies, reducedMotion, tempObject, baseColor]);
+    emissiveAttribute.needsUpdate = true;
+  }, [fireflies, reducedMotion, tempObject]);
 
   useFrame(({ clock }) => {
     if (reducedMotion) return;
     const mesh = meshRef.current;
     if (!mesh) return;
+    const emissiveAttribute = mesh.geometry.getAttribute(
+      EMISSIVE_ATTRIBUTE,
+    ) as THREE.InstancedBufferAttribute | undefined;
+    if (!emissiveAttribute) return;
     const t = clock.elapsedTime;
 
     for (let i = 0; i < fireflies.length; i++) {
@@ -127,17 +169,20 @@ export default function Fireflies({ reducedMotion }: Props) {
         f.origin.y + dy,
         f.origin.z + dz,
       );
-      const fade = 0.4 + (Math.sin(t * f.fadeSpeed + f.fadePhase) * 0.5 + 0.5);
-      tempObject.scale.setScalar(0.85 + fade * 0.3);
+      tempObject.scale.setScalar(1);
       tempObject.updateMatrix();
       mesh.setMatrixAt(i, tempObject.matrix);
 
-      const intensity = 0.4 + fade;
-      tempColor.copy(baseColor).multiplyScalar(intensity);
-      mesh.setColorAt(i, tempColor);
+      const fade = Math.sin(t * f.fadeSpeed + f.fadePhase) * 0.5 + 0.5;
+      const intensity = THREE.MathUtils.lerp(
+        MIN_EMISSIVE,
+        MAX_EMISSIVE,
+        fade,
+      );
+      emissiveAttribute.setX(i, intensity / BASE_EMISSIVE);
     }
     mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    emissiveAttribute.needsUpdate = true;
   });
 
   if (reducedMotion) return null;

@@ -5,6 +5,7 @@ import { flowerLayout } from "./config/flowerLayout";
 import { promiseToFlower } from "./config/promiseToFlower";
 import Flower from "./flowers/Flower";
 import { useGardenPromises } from "./hooks/useGardenPromises";
+import { selectionActions } from "./hooks/useSelectionStore";
 import BackgroundFoliage from "./scene/BackgroundFoliage";
 import EmptyPlanter from "./scene/EmptyPlanter";
 import Fireflies from "./scene/Fireflies";
@@ -17,10 +18,13 @@ type Props = {
   reducedMotion: boolean;
 };
 
-function pickNewestId(promises: ReturnType<typeof useGardenPromises>): string | null {
-  if (promises.length === 0) return null;
-  let newest = promises[0];
-  for (let i = 1; i < promises.length; i++) {
+function pickNewestKeptId(
+  promises: ReturnType<typeof useGardenPromises>,
+): string | null {
+  let newest = promises.find((p) => p.status === "kept") ?? null;
+  if (!newest) return null;
+  for (let i = 0; i < promises.length; i++) {
+    if (promises[i].status !== "kept") continue;
     const a = promises[i].completedAt ?? promises[i].createdAt;
     const b = newest.completedAt ?? newest.createdAt;
     if (a > b) newest = promises[i];
@@ -38,14 +42,14 @@ export default function GardenScene({ reducedMotion }: Props) {
     return flowerLayout(promises.length, seeds);
   }, [promises, isEmpty]);
 
-  const newestId = useMemo(() => pickNewestId(promises), [promises]);
+  const newestKeptId = useMemo(() => pickNewestKeptId(promises), [promises]);
 
   return (
     <>
       <fog attach="fog" args={["#2A1A3E", 5, 22]} />
       <TwilightSky reducedMotion={reducedMotion} />
       <Lights />
-      <Ground />
+      <Ground onPlanterClick={selectionActions.unpin} />
       <GroundMist reducedMotion={reducedMotion} />
       <BackgroundFoliage />
       <Fireflies reducedMotion={reducedMotion} />
@@ -61,7 +65,7 @@ export default function GardenScene({ reducedMotion }: Props) {
               position={place.position}
               rotationY={place.rotationY}
               reducedMotion={reducedMotion}
-              bloomIn={promise.id === newestId}
+              bloomIn={promise.id === newestKeptId}
             />
           );
         })}

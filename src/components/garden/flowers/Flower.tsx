@@ -46,6 +46,7 @@ const ARCHETYPES: Record<ArchetypeKey, ComponentType<ArchetypeProps>> = {
 const HOVER_SCALE = 1.07;
 const HOVER_LERP_FAST = 0.22;
 const STAMEN_BOOST = 1.4;
+const BOOSTABLE_EMISSIVE_MIN = 0.1;
 const SWAY_TILT_DEG = 2;
 const SWAY_BOB = 0.015;
 const BLOOM_IN_DURATION = 1.2;
@@ -73,7 +74,7 @@ function applyEmissiveBoost(root: THREE.Object3D, mult: number): void {
       if (mat.__baseEmissive === undefined) {
         mat.__baseEmissive = mat.emissiveIntensity;
       }
-      if (mat.__baseEmissive > 0.05) {
+      if (mat.__baseEmissive > BOOSTABLE_EMISSIVE_MIN) {
         mat.emissiveIntensity = mat.__baseEmissive * mult;
       }
     }
@@ -104,24 +105,30 @@ export default function Flower({
   const archetypeRootRef = useRef<THREE.Group>(null);
 
   const targetScale = instance.scale;
+  const targetBloom = instance.bloom;
+  const shouldBloomIn = bloomIn && !reducedMotion && targetBloom > 0;
   const swayPeriod = useMemo(
     () => 4 + (instance.swayPhase / (Math.PI * 2)) * 2,
     [instance.swayPhase],
   );
 
   const [initialScale] = useState(() =>
-    bloomIn && !reducedMotion ? 0 : targetScale,
+    shouldBloomIn ? 0 : targetScale,
+  );
+  const [renderedBloom, setRenderedBloom] = useState(() =>
+    shouldBloomIn ? 0 : targetBloom,
   );
 
   const bloomInElapsedRef = useRef(0);
   const currentScaleRef = useRef(initialScale);
+  const currentBloomRef = useRef(renderedBloom);
   const hoverScaleRef = useRef(1);
   const emissiveBoostRef = useRef(1);
   const lastAppliedBoostRef = useRef(1);
 
-  const { hovered, pinned } = useIsFlowerActive(promise.id);
+  const { hovered, pinned, focused } = useIsFlowerActive(promise.id);
   const actions = useSelectionActions();
-  const active = hovered || pinned;
+  const active = hovered || pinned || focused;
 
   const [labelMounted, setLabelMounted] = useState(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -154,7 +161,7 @@ export default function Flower({
   }, []);
 
   useFrame((_, delta) => {
-    if (bloomIn && !reducedMotion && bloomInElapsedRef.current < BLOOM_IN_DURATION) {
+    if (shouldBloomIn && bloomInElapsedRef.current < BLOOM_IN_DURATION) {
       bloomInElapsedRef.current += delta;
       const t = Math.min(1, bloomInElapsedRef.current / BLOOM_IN_DURATION);
       const eased = easeOutBack(t);
@@ -163,8 +170,20 @@ export default function Flower({
         0,
         targetScale * 1.5,
       );
+      const nextBloom = THREE.MathUtils.clamp(eased * targetBloom, 0, targetBloom);
+      if (
+        Math.abs(nextBloom - currentBloomRef.current) > 0.01 ||
+        t === 1
+      ) {
+        currentBloomRef.current = nextBloom;
+        setRenderedBloom(nextBloom);
+      }
     } else {
       currentScaleRef.current = targetScale;
+      if (currentBloomRef.current !== targetBloom) {
+        currentBloomRef.current = targetBloom;
+        setRenderedBloom(targetBloom);
+      }
     }
 
     const lerpRate = reducedMotion
@@ -243,7 +262,7 @@ export default function Flower({
           <group ref={archetypeRootRef}>
             <Archetype
               palette={palette}
-              bloom={instance.bloom}
+              bloom={renderedBloom}
               seed={instance.seed}
             />
           </group>

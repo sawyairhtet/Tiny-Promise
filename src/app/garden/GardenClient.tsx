@@ -32,24 +32,41 @@ export default function GardenClient() {
   const reducedMotion = useReducedMotion();
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+    <div
+      style={{
+        position: "relative",
+        left: "50%",
+        width: "min(1120px, calc(100vw - 32px))",
+        transform: "translateX(-50%)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "18px",
+        paddingBottom: "104px",
+      }}
+    >
       <CursorEffect />
       <div
         style={{
           position: "relative",
           width: "100%",
-          height: "calc(100dvh - 320px)",
-          minHeight: "380px",
-          overflow: "hidden",
-          borderRadius: "20px",
+          height: "clamp(420px, calc(100dvh - 390px), 560px)",
+          minHeight: "420px",
+          overflow: "visible",
+          borderRadius: "24px",
           background: CSS_SKY_GRADIENT,
           boxShadow:
-            "0 1px 3px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.04) inset",
+            "0 18px 44px rgba(16, 10, 36, 0.22), 0 0 0 1px rgba(245, 230, 208, 0.08) inset",
         }}
       >
         <GardenCanvas />
       </div>
-      <GardenList promises={promises} defaultOpen={reducedMotion} />
+      <div style={{ maxWidth: "860px", width: "100%", margin: "0 auto" }}>
+        <GardenList
+          key={reducedMotion ? "garden-list-reduced" : "garden-list-motion"}
+          promises={promises}
+          defaultOpen={reducedMotion}
+        />
+      </div>
     </div>
   );
 }
